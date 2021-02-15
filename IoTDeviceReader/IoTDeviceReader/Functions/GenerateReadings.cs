@@ -44,26 +44,15 @@ namespace IoTDeviceReader.Functions
             try
             {
                 // Generate device readings
-                List<DeviceReading> deviceReadings = ReadingGenerator.GenerateReadings(100);
-                Queue<ServiceBusMessage> messages = new Queue<ServiceBusMessage>();
+                List<DeviceReading> deviceReadings = ReadingGenerator.GenerateReadings(100);             
 
                 // Send reading to a Service Bus Queue
                 foreach (var reading in deviceReadings)
                 {
-                    messages.Enqueue(new ServiceBusMessage(JsonConvert.SerializeObject(reading)));
+                    var message = new ServiceBusMessage(JsonConvert.SerializeObject(reading));
+                    await _sender.SendMessageAsync(message);
                 }
-
-                while (messages.Count > 0)
-                {
-                    using ServiceBusMessageBatch messageBatch = await _sender.CreateMessageBatchAsync();
-                    while (messages.Count > 0 && messageBatch.TryAddMessage(messages.Peek()))
-                    {
-                        messages.Dequeue();
-                    }
-
-                    await _sender.SendMessagesAsync(messageBatch);
-                }
-
+              
                 result = new StatusCodeResult(StatusCodes.Status200OK);
             }
             catch (Exception ex)

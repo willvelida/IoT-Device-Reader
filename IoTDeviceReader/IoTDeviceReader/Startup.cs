@@ -34,6 +34,7 @@ namespace IoTDeviceReader
             builder.Services.AddSingleton((s) => new ServiceBusClient(config["ServiceBusConnectionString"]));
 
             builder.Services.AddTransient<IDeviceRepository, DeviceRepository>();
+            builder.Services.AddTransient<ICoreRepository, CoreRepository>();
         }
     }
 }
