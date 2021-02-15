@@ -31,7 +31,6 @@ namespace IoTDeviceReader.Functions
             ConnectionStringSetting = "CosmosDBConnectionString",
             LeaseCollectionName = "leases",
             CreateLeaseCollectionIfNotExists = true,
-            StartFromBeginning = true,
             FeedPollDelay = 10)]IReadOnlyList<Document> input, ILogger log)
         {
             try
