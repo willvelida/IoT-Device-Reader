@@ -50,5 +50,31 @@ namespace IoTDeviceReader.Functions
                 return new OkObjectResult(deviceReading);
             }
         }
+
+        [FunctionName("CreateDeviceReading")]
+        public static async Task CreateDeviceReading(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "Device")] HttpRequest req,
+            [CosmosDB(
+                databaseName: "DeviceDB",
+                collectionName: "DeviceCore",
+                ConnectionStringSetting = "CosmosDBConnectionString")] IAsyncCollector<DeviceReading> deviceReading,
+            ILogger log)
+        {
+            string input = await new StreamReader(req.Body).ReadToEndAsync();
+
+            DeviceReading incomingRequest = JsonConvert.DeserializeObject<DeviceReading>(input);
+
+            var reading = new DeviceReading
+            {
+                DeviceReadingId = Guid.NewGuid().ToString(),
+                DamageLevel = incomingRequest.DamageLevel,
+                DeviceLocation = incomingRequest.DeviceLocation,
+                DeviceTempreature = incomingRequest.DeviceTempreature,
+                Longitude = incomingRequest.Longitude,
+                Latitude = incomingRequest.Latitude
+            };
+
+            await deviceReading.AddAsync(reading);
+        }
     }
 }
