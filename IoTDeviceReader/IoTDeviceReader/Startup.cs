@@ -8,6 +8,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Azure.Cosmos;
 using Azure.Messaging.ServiceBus;
+using IoTDeviceReader.Repositories;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace IoTDeviceReader
@@ -30,7 +31,9 @@ namespace IoTDeviceReader
             };
 
             builder.Services.AddSingleton((s) => new CosmosClient(config["CosmosDBConnectionString"], cosmosClientOptions));
-            builder.Services.AddSingleton((s) => new ServiceBusClient(config["ServiceBusConnectionString"]));       
+            builder.Services.AddSingleton((s) => new ServiceBusClient(config["ServiceBusConnectionString"]));
+
+            builder.Services.AddTransient<IDeviceRepository, DeviceRepository>();
         }
     }
 }
