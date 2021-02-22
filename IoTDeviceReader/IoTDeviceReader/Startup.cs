@@ -2,10 +2,7 @@
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Microsoft.Azure.Cosmos;
 using Azure.Messaging.ServiceBus;
 using IoTDeviceReader.Repositories;

@@ -38,11 +38,10 @@ namespace IoTDeviceReader.Functions
                 collectionName: "DeviceReadings",
                 ConnectionStringSetting = "CosmosDBConnectionString",
                 Id = "{id}",
-                PartitionKey = "{id}")] DeviceReading deviceReading,
-            ILogger log)
+                PartitionKey = "{id}")] DeviceReading deviceReading)
         {
             if (deviceReading == null)
-            {
+            {               
                 return new NotFoundResult();
             }
             else
@@ -57,8 +56,7 @@ namespace IoTDeviceReader.Functions
             [CosmosDB(
                 databaseName: "DeviceDB",
                 collectionName: "DeviceCore",
-                ConnectionStringSetting = "CosmosDBConnectionString")] IAsyncCollector<DeviceReading> deviceReading,
-            ILogger log)
+                ConnectionStringSetting = "CosmosDBConnectionString")] IAsyncCollector<DeviceReading> deviceReading)
         {
             string input = await new StreamReader(req.Body).ReadToEndAsync();
 

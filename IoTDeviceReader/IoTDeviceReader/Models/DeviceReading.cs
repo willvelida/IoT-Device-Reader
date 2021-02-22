@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IoTDeviceReader.Models
 {
@@ -19,5 +16,7 @@ namespace IoTDeviceReader.Models
         public string DamageLevel { get; set; }
         [JsonProperty(PropertyName = "location")]
         public string DeviceLocation { get; set; }
+        [JsonProperty(PropertyName = "manufacturer")]
+        public DeviceManufacturer Manufacturer { get; set; }
     }
 }

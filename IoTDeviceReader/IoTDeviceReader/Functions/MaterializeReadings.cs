@@ -5,7 +5,6 @@ using IoTDeviceReader.Models;
 using IoTDeviceReader.Repositories;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -31,7 +30,7 @@ namespace IoTDeviceReader.Functions
             ConnectionStringSetting = "CosmosDBConnectionString",
             LeaseCollectionName = "leases",
             CreateLeaseCollectionIfNotExists = true,
-            FeedPollDelay = 10)]IReadOnlyList<Document> input, ILogger log)
+            FeedPollDelay = 10)]IReadOnlyList<Document> input)
         {
             try
             {
