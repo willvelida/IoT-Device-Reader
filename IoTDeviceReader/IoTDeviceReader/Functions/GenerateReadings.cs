@@ -1,16 +1,16 @@
-using System;
-using System.Threading.Tasks;
+using Azure.Messaging.ServiceBus;
+using IoTDeviceReader.Helpers;
+using IoTDeviceReader.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using IoTDeviceReader.Models;
-using IoTDeviceReader.Helpers;
-using Azure.Messaging.ServiceBus;
-using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 namespace IoTDeviceReader.Functions
 {
@@ -43,7 +43,7 @@ namespace IoTDeviceReader.Functions
             try
             {
                 // Generate device readings
-                List<DeviceReading> deviceReadings = ReadingGenerator.GenerateReadings(100);             
+                List<DeviceReading> deviceReadings = ReadingGenerator.GenerateReadings(100);
 
                 // Send reading to a Service Bus Queue
                 foreach (var reading in deviceReadings)
@@ -51,7 +51,7 @@ namespace IoTDeviceReader.Functions
                     var message = new ServiceBusMessage(JsonConvert.SerializeObject(reading));
                     await _sender.SendMessageAsync(message);
                 }
-              
+
                 result = new StatusCodeResult(StatusCodes.Status200OK);
             }
             catch (Exception ex)

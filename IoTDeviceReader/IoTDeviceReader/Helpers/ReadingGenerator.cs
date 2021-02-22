@@ -21,8 +21,8 @@ namespace IoTDeviceReader.Helpers
                 .RuleFor(i => i.DeviceReadingId, (fake) => Guid.NewGuid().ToString())
                 .RuleFor(i => i.DeviceTempreature, (fake) => fake.Random.Double(0, 150.0))
                 .RuleFor(i => i.Latitude, (fake) => fake.Random.Double(-180.0, 180.0))
-                .RuleFor(i => i.Longitude, (fake) => fake.Random.Double(-180.0, 180.0))             
-                .RuleFor(i => i.DeviceLocation, (fake) => fake.PickRandom(new List<string> { "New Zealand", "USA", "UK", "Brazil", "Netherlands", "Italy", "Russia"}))
+                .RuleFor(i => i.Longitude, (fake) => fake.Random.Double(-180.0, 180.0))
+                .RuleFor(i => i.DeviceLocation, (fake) => fake.PickRandom(new List<string> { "New Zealand", "USA", "UK", "Brazil", "Netherlands", "Italy", "Russia" }))
                 .RuleFor(i => i.Device, (fake) => generatedManufacturer)
                 .Generate(numberOfReadings);
 

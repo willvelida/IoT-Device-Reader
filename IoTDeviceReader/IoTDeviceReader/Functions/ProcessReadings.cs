@@ -1,30 +1,28 @@
-using System;
-using System.Threading.Tasks;
 using IoTDeviceReader.Models;
 using IoTDeviceReader.Repositories;
-using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
+using System.Threading.Tasks;
 
 namespace IoTDeviceReader.Functions
 {
     public class ProcessReadings
     {
         private readonly ILogger<ProcessReadings> _logger;
-        private readonly IDeviceRepository _deviceRepository;
+        private readonly IDeviceReadingRepository _deviceRepository;
 
         public ProcessReadings(
             ILogger<ProcessReadings> logger,
-            IDeviceRepository deviceRepository)
+            IDeviceReadingRepository deviceRepository)
         {
             _logger = logger;
             _deviceRepository = deviceRepository;
         }
 
         [FunctionName(nameof(ProcessReadings))]
-        public async Task Run([ServiceBusTrigger("devicereadings", Connection = "ServiceBusConnectionString")]string myQueueItem)
+        public async Task Run([ServiceBusTrigger("devicereadings", Connection = "ServiceBusConnectionString")] string myQueueItem)
         {
             try
             {

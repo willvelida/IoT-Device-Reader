@@ -1,12 +1,14 @@
-﻿using IoTDeviceReader;
+﻿using Azure.Messaging.EventHubs.Producer;
+using Azure.Messaging.ServiceBus;
+using IoTDeviceReader;
+using IoTDeviceReader.Helpers.Table;
+using IoTDeviceReader.Models;
+using IoTDeviceReader.Repositories;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
-using Microsoft.Azure.Cosmos;
-using Azure.Messaging.ServiceBus;
-using IoTDeviceReader.Repositories;
-using Azure.Messaging.EventHubs.Producer;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace IoTDeviceReader
@@ -33,8 +35,9 @@ namespace IoTDeviceReader
             builder.Services.AddSingleton((s) => new EventHubProducerClient(config["EventHubConnectionString"], config["EventHubName"]));
             builder.Services.AddSingleton((s) => new EventHubProducerClient(config["EventHubConnectionString"], config["LowMediumDamageEventHubName"]));
             builder.Services.AddSingleton((s) => new EventHubProducerClient(config["EventHubConnectionString"], config["HighDamageEventHubName"]));
+            builder.Services.AddSingleton((s) => new CosmosTableHelper<DeviceEntity>(config["StorageConnectionString"], config["TableName"]));
 
-            builder.Services.AddTransient<IDeviceRepository, DeviceRepository>();
+            builder.Services.AddTransient<IDeviceReadingRepository, DeviceReadingRepository>();
             builder.Services.AddTransient<ICoreRepository, CoreRepository>();
         }
     }

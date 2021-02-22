@@ -1,18 +1,17 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
+using Azure.Messaging.EventHubs;
+using Azure.Messaging.EventHubs.Producer;
+using IoTDeviceReader.Helpers;
+using IoTDeviceReader.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Azure.Messaging.EventHubs.Producer;
+using System;
 using System.Collections.Generic;
-using IoTDeviceReader.Models;
-using IoTDeviceReader.Helpers;
-using Azure.Messaging.EventHubs;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace IoTDeviceReader.Functions
 {
@@ -41,9 +40,9 @@ namespace IoTDeviceReader.Functions
                 EventDataBatch eventDataBatch = await _eventHubProducerClient.CreateBatchAsync();
 
                 foreach (var device in devices)
-                {                   
+                {
                     var deviceEvent = JsonConvert.SerializeObject(device);
-                    eventDataBatch.TryAdd(new EventData(Encoding.UTF8.GetBytes(deviceEvent)));                   
+                    eventDataBatch.TryAdd(new EventData(Encoding.UTF8.GetBytes(deviceEvent)));
                 }
 
                 await _eventHubProducerClient.SendAsync(eventDataBatch);

@@ -6,10 +6,10 @@ namespace IoTDeviceReader.Repositories
     public interface IDeviceRepository
     {
         /// <summary>
-        /// Adds a device reading to the device container.
+        /// Adds a device to the Device Container.
         /// </summary>
-        /// <param name="deviceReading"></param>
+        /// <param name="device"></param>
         /// <returns></returns>
-        Task AddReading(DeviceReading deviceReading);
+        Task AddDevice(Device device);
     }
 }
