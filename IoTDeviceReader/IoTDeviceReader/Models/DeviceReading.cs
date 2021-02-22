@@ -12,11 +12,9 @@ namespace IoTDeviceReader.Models
         public double Latitude { get; set; }
         [JsonProperty(PropertyName = "longitude")]
         public double Longitude { get; set; }
-        [JsonProperty(PropertyName = "damageLevel")]
-        public string DamageLevel { get; set; }
         [JsonProperty(PropertyName = "location")]
         public string DeviceLocation { get; set; }
-        [JsonProperty(PropertyName = "manufacturer")]
-        public DeviceManufacturer Manufacturer { get; set; }
+        [JsonProperty(PropertyName = "device")]
+        public Device Device { get; set; }
     }
 }

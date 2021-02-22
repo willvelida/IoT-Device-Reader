@@ -16,7 +16,7 @@ namespace IoTDeviceReader.Functions
     {
         [FunctionName("GetDeviceReadingByLocation")]
         public static async Task<IActionResult> GetDeviceReadingByLocation(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Device/{location}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "DeviceReading/{location}")] HttpRequest req,
             [CosmosDB(
                 databaseName: "DeviceDB",
                 collectionName: "DeviceCore",
@@ -32,7 +32,7 @@ namespace IoTDeviceReader.Functions
 
         [FunctionName("GetDeviceReadingById")]
         public static async Task<IActionResult> GetDeviceReadingById(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Device/{id}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "DeviceReading/{id}")] HttpRequest req,
             [CosmosDB(
                 databaseName: "DeviceDB",
                 collectionName: "DeviceReadings",
@@ -52,7 +52,7 @@ namespace IoTDeviceReader.Functions
 
         [FunctionName("CreateDeviceReading")]
         public static async Task CreateDeviceReading(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "Device")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "DeviceReading")] HttpRequest req,
             [CosmosDB(
                 databaseName: "DeviceDB",
                 collectionName: "DeviceCore",
@@ -65,11 +65,18 @@ namespace IoTDeviceReader.Functions
             var reading = new DeviceReading
             {
                 DeviceReadingId = Guid.NewGuid().ToString(),
-                DamageLevel = incomingRequest.DamageLevel,
                 DeviceLocation = incomingRequest.DeviceLocation,
                 DeviceTempreature = incomingRequest.DeviceTempreature,
                 Longitude = incomingRequest.Longitude,
-                Latitude = incomingRequest.Latitude
+                Latitude = incomingRequest.Latitude,
+                Device = new Device
+                {
+                    AgeInDays = incomingRequest.Device.AgeInDays,
+                    DamageLevel = incomingRequest.Device.DamageLevel,
+                    Manufacturer = incomingRequest.Device.Manufacturer,
+                    Name = incomingRequest.Device.Name,
+                    DeviceId = Guid.NewGuid().ToString()
+                }
             };
 
             await deviceReading.AddAsync(reading);

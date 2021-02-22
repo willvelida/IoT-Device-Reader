@@ -6,6 +6,7 @@ using System.IO;
 using Microsoft.Azure.Cosmos;
 using Azure.Messaging.ServiceBus;
 using IoTDeviceReader.Repositories;
+using Azure.Messaging.EventHubs.Producer;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace IoTDeviceReader
@@ -29,6 +30,9 @@ namespace IoTDeviceReader
 
             builder.Services.AddSingleton((s) => new CosmosClient(config["CosmosDBConnectionString"], cosmosClientOptions));
             builder.Services.AddSingleton((s) => new ServiceBusClient(config["ServiceBusConnectionString"]));
+            builder.Services.AddSingleton((s) => new EventHubProducerClient(config["EventHubConnectionString"], config["EventHubName"]));
+            builder.Services.AddSingleton((s) => new EventHubProducerClient(config["EventHubConnectionString"], config["LowMediumDamageEventHubName"]));
+            builder.Services.AddSingleton((s) => new EventHubProducerClient(config["EventHubConnectionString"], config["HighDamageEventHubName"]));
 
             builder.Services.AddTransient<IDeviceRepository, DeviceRepository>();
             builder.Services.AddTransient<ICoreRepository, CoreRepository>();
