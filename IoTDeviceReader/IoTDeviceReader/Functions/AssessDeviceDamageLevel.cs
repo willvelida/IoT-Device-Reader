@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Azure.Messaging.EventHubs.Producer;
@@ -10,7 +8,6 @@ using Microsoft.Azure.EventHubs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using EventDataBatch = Azure.Messaging.EventHubs.Producer.EventDataBatch;
 
 namespace IoTDeviceReader.Functions
 {

@@ -1,8 +1,6 @@
 ﻿using Azure.Messaging.EventHubs.Producer;
 using IoTDeviceReader.Models;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
