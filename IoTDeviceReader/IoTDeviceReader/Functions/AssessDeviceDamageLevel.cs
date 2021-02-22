@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Azure.Messaging.EventHubs.Producer;
+using IoTDeviceReader.Helpers;
 using IoTDeviceReader.Models;
 using Microsoft.Azure.EventHubs;
 using Microsoft.Azure.WebJobs;
@@ -43,20 +44,14 @@ namespace IoTDeviceReader.Functions
                     if (device.DamageLevel == "High")
                     {
                         // Send to High Damage Event Hub
-                        EventDataBatch eventDataBatch = await _highDamageEventHubClient.CreateBatchAsync();
-                        var highDamageEvent = JsonConvert.SerializeObject(device);
-                        eventDataBatch.TryAdd(new Azure.Messaging.EventHubs.EventData(Encoding.UTF8.GetBytes(highDamageEvent)));
-                        await _highDamageEventHubClient.SendAsync(eventDataBatch);
+                        await _highDamageEventHubClient.SendEvent(device);
                         _logger.LogInformation($"Device Id: {device.DeviceId} has a high level of damage. Sending to RepairDeviceFunction");
                     }
 
                     if (device.DamageLevel == "Low" || device.DamageLevel == "Medium")
                     {
                         // Send to LowMedium Event Hub
-                        EventDataBatch eventDataBatch = await _lowMediumDamageEventHubClient.CreateBatchAsync();
-                        var lowMediumDamageEvent = JsonConvert.SerializeObject(device);
-                        eventDataBatch.TryAdd(new Azure.Messaging.EventHubs.EventData(Encoding.UTF8.GetBytes(lowMediumDamageEvent)));
-                        await _lowMediumDamageEventHubClient.SendAsync(eventDataBatch);
+                        await _lowMediumDamageEventHubClient.SendEvent(device);
                         _logger.LogInformation($"Device Id: {device.DeviceId} is in acceptable condition. Sending to DeployDeviceFunction");
                     }
 
