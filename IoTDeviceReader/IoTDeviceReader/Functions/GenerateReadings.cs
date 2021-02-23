@@ -50,6 +50,7 @@ namespace IoTDeviceReader.Functions
                 {
                     var message = new ServiceBusMessage(JsonConvert.SerializeObject(reading));
                     await _sender.SendMessageAsync(message);
+                    _logger.LogInformation($"Generating reading {reading.DeviceReadingId}");
                 }
 
                 result = new StatusCodeResult(StatusCodes.Status200OK);

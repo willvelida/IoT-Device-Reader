@@ -9,10 +9,10 @@ namespace IoTDeviceReader.Models
 
         }
 
-        public DeviceEntity(string deviceId, string damageLevel)
+        public DeviceEntity(string deviceId, int age)
         {
             PartitionKey = deviceId;
-            RowKey = damageLevel;
+            RowKey = age.ToString();
         }
     }
 }

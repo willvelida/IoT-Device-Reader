@@ -34,7 +34,7 @@ namespace IoTDeviceReader.Functions
 
                     var damagedDevice = JsonConvert.DeserializeObject<Device>(messageBody);
 
-                    var deviceEntity = new DeviceEntity(damagedDevice.DeviceId, damagedDevice.DamageLevel);
+                    var deviceEntity = new DeviceEntity(damagedDevice.DeviceId, damagedDevice.AgeInDays);
 
                     await _cosmosTableHelper.InsertOrMerge(deviceEntity);
                     _logger.LogInformation($"Damaged device {deviceEntity.PartitionKey} is ready for repair");

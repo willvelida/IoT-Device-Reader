@@ -39,6 +39,7 @@ namespace IoTDeviceReader
 
             builder.Services.AddTransient<IDeviceReadingRepository, DeviceReadingRepository>();
             builder.Services.AddTransient<ICoreRepository, CoreRepository>();
+            builder.Services.AddTransient<IDeviceRepository, DeviceRepository>();
         }
     }
 }

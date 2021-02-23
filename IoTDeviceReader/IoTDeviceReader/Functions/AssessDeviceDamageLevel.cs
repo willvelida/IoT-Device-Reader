@@ -3,6 +3,7 @@ using IoTDeviceReader.Helpers;
 using IoTDeviceReader.Models;
 using Microsoft.Azure.EventHubs;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -19,12 +20,12 @@ namespace IoTDeviceReader.Functions
 
         public AssessDeviceDamageLevel(
             ILogger<AssessDeviceDamageLevel> logger,
-            EventHubProducerClient highDamageEventHubClient,
-            EventHubProducerClient lowMediumDamageEventHubClient)
+            IConfiguration config
+            )
         {
             _logger = logger;
-            _highDamageEventHubClient = highDamageEventHubClient;
-            _lowMediumDamageEventHubClient = lowMediumDamageEventHubClient;
+            _highDamageEventHubClient = new EventHubProducerClient(config["EventHubConnectionString"], config["HighDamageEventHubName"]);
+            _lowMediumDamageEventHubClient = new EventHubProducerClient(config["EventHubConnectionString"], config["LowMediumDamageEventHubName"]);
         }
 
         [FunctionName(nameof(AssessDeviceDamageLevel))]
@@ -44,14 +45,11 @@ namespace IoTDeviceReader.Functions
                         await _highDamageEventHubClient.SendEvent(device);
                         _logger.LogInformation($"Device Id: {device.DeviceId} has a high level of damage. Sending to RepairDeviceFunction");
                     }
-
-                    if (device.DamageLevel == "Low" || device.DamageLevel == "Medium")
+                    else
                     {
-                        // Send to LowMedium Event Hub
                         await _lowMediumDamageEventHubClient.SendEvent(device);
                         _logger.LogInformation($"Device Id: {device.DeviceId} is in acceptable condition. Sending to DeployDeviceFunction");
-                    }
-
+                    }                                      
                 }
             }
             catch (Exception ex)

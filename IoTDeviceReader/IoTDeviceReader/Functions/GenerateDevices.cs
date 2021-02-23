@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -22,10 +23,11 @@ namespace IoTDeviceReader.Functions
 
         public GenerateDevices(
             ILogger<GenerateDevices> logger,
-            EventHubProducerClient eventHubProducerClient)
+            EventHubProducerClient eventHubProducerClient,
+            IConfiguration config)
         {
             _logger = logger;
-            _eventHubProducerClient = eventHubProducerClient;
+            _eventHubProducerClient = new EventHubProducerClient(config["EventHubConnectionString"], config["EventHubName"]);
         }
 
         [FunctionName(nameof(GenerateDevices))]
@@ -36,13 +38,14 @@ namespace IoTDeviceReader.Functions
 
             try
             {
-                List<Device> devices = ReadingGenerator.GenerateDevices(1000);
+                List<Device> devices = ReadingGenerator.GenerateDevices(100);
                 EventDataBatch eventDataBatch = await _eventHubProducerClient.CreateBatchAsync();
 
                 foreach (var device in devices)
                 {
                     var deviceEvent = JsonConvert.SerializeObject(device);
                     eventDataBatch.TryAdd(new EventData(Encoding.UTF8.GetBytes(deviceEvent)));
+                    _logger.LogInformation($"Generating Device {device.DeviceId}");
                 }
 
                 await _eventHubProducerClient.SendAsync(eventDataBatch);
