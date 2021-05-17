@@ -27,7 +27,7 @@ namespace IoTDeviceReader
 
             var cosmosClientOptions = new CosmosClientOptions
             {
-                ConnectionMode = ConnectionMode.Direct
+                ConnectionMode = ConnectionMode.Direct,
             };
 
             builder.Services.AddSingleton((s) => new CosmosClient(config["CosmosDBConnectionString"], cosmosClientOptions));
